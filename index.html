@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GymLead AI | Turn More Gym Enquiries Into Paying Members</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        dark: '#0a0a0a',
+                        card: '#111111',
+                        border: '#222222',
+                        neon: '#39FF14',
+                        'neon-dim': 'rgba(57, 255, 20, 0.1)',
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 2s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 10px rgba(57, 255, 20, 0.2)' },
+                            '50%': { boxShadow: '0 0 20px rgba(57, 255, 20, 0.6)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #0a0a0a; color: #ffffff; }
+        .gradient-text {
+            background: linear-gradient(90deg, #ffffff, #a3a3a3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-neon {
+            background: linear-gradient(90deg, #39FF14, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #39FF14; }
+    </style>
+</head>
+<body class="antialiased font-sans overflow-x-hidden selection:bg-neon selection:text-black">
+
+    <script>
+        const GYMLEAD_CONFIG = {
+            // Add your Google Apps Script URL here later
+            GOOGLE_APPS_SCRIPT_URL: "", 
+            // Add your YouTube or MP4 URL here later
+            DEMO_VIDEO_URL: "" 
+        };
+        const WHATSAPP_BASE = "https://wa.me/919381423141";
+        const WHATSAPP_DEMO_URL = `${WHATSAPP_BASE}?text=${encodeURIComponent("Hi GymLead AI, I am interested in booking a free demo for my gym.")}`;
+    </script>
+
+    <nav class="fixed w-full top-0 z-50 bg-dark/80 backdrop-blur-md border-b border-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <i class="fa-solid fa-dumbbell text-neon text-2xl mr-2"></i>
+                    <span class="font-bold text-xl tracking-wider text-white">GYMLEAD <span class="text-neon">AI</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#how-it-works" class="text-gray-300 hover:text-neon transition text-sm font-semibold">How It Works</a>
+                    <a href="#features" class="text-gray-300 hover:text-neon transition text-sm font-semibold">Features</a>
+                    <a href="#dashboard" class="text-gray-300 hover:text-neon transition text-sm font-semibold">Dashboard</a>
+                    <a href="#pricing" class="text-gray-300 hover:text-neon transition text-sm font-semibold">Pricing</a>
+                    <a href="#faq" class="text-gray-300 hover:text-neon transition text-sm font-semibold">FAQ</a>
+                    <a href="#contact" class="text-gray-300 hover:text-neon transition text-sm font-semibold">Contact</a>
+                    <a href="javascript:void(0)" onclick="window.open(WHATSAPP_DEMO_URL, '_blank')" class="bg-neon text-black px-5 py-2.5 rounded-lg font-bold hover:bg-white transition shadow-[0_0_15px_rgba(57,255,20,0.3)] hover:shadow-[0_0_20px_rgba(255,255,255,0.5)]">
+                        Book a Free Demo
+                    </a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none text-2xl">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-card border-b border-border">
+            <div class="px-4 pt-2 pb-6 space-y-2 text-center flex flex-col">
+                <a href="#how-it-works" class="block px-3 py-2 text-gray-300 hover:text-neon">How It Works</a>
+                <a href="#features" class="block px-3 py-2 text-gray-300 hover:text-neon">Features</a>
+                <a href="#dashboard" class="block px-3 py-2 text-gray-300 hover:text-neon">Dashboard</a>
+                <a href="#pricing" class="block px-3 py-2 text-gray-300 hover:text-neon">Pricing</a>
+                <a href="#faq" class="block px-3 py-2 text-gray-300 hover:text-neon">FAQ</a>
+                <a href="javascript:void(0)" onclick="window.open(WHATSAPP_DEMO_URL, '_blank')" class="mt-4 inline-block bg-neon text-black px-5 py-3 rounded-lg font-bold">Book a Free Demo</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full opacity-20 pointer-events-none">
+            <div class="absolute top-[-20%] left-[-10%] w-96 h-96 bg-neon rounded-full mix-blend-screen filter blur-[150px]"></div>
+            <div class="absolute bottom-[-10%] right-[-5%] w-[30rem] h-[30rem] bg-emerald-600 rounded-full mix-blend-screen filter blur-[150px]"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+                <div class="mb-16 lg:mb-0 text-center lg:text-left">
+                    <div class="inline-flex items-center space-x-2 bg-neon-dim border border-neon/30 text-neon px-4 py-1.5 rounded-full text-sm font-semibold mb-6">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-neon"></span>
+                        </span>
+                        <span>AI Lead Management for Gyms</span>
+                    </div>
+                    <h1 class="text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
+                        Stop Losing Gym Leads. <br>
+                        <span class="gradient-neon">Start Converting More Members.</span>
+                    </h1>
+                    <p class="text-lg lg:text-xl text-gray-400 mb-10 max-w-2xl mx-auto lg:mx-0">
+                        GymLead AI helps gyms organize leads, identify high-potential prospects, and take smarter follow-up actions using AI.
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center lg:justify-start">
+                        <a href="javascript:void(0)" onclick="window.open(WHATSAPP_DEMO_URL, '_blank')" class="bg-neon text-black px-8 py-4 rounded-xl font-bold text-lg hover:bg-white transition shadow-[0_0_20px_rgba(57,255,20,0.4)] flex items-center justify-center">
+                            Book a Free Demo <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                        <a href="#demo-video" class="bg-card border border-border text-white px-8 py-4 rounded-xl font-bold text-lg hover:border-neon hover:text-neon transition flex items-center justify-center">
+                            <i class="fa-regular fa-circle-play mr-2"></i> Watch Demo
+                        </a>
+                    </div>
+                </div>
+
+                <div class="relative w-full max-w-lg mx-auto lg:max-w-none animate-float">
+                    <div class="bg-card border border-border rounded-2xl shadow-2xl p-6 relative overflow-hidden">
+                        <div class="flex justify-between items-center mb-6 border-b border-border pb-4">
+                            <div class="font-bold text-lg"><i class="fa-solid fa-chart-line text-neon mr-2"></i> Dashboard Overview</div>
+                            <div class="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded">Live Sync</div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="bg-dark p-4 rounded-lg border border-border">
+                                <div class="text-gray-500 text-xs mb-1">Total Leads</div>
+                                <div class="text-2xl font-bold">1,248</div>
+                            </div>
+                            <div class="bg-dark p-4 rounded-lg border border-border">
+                                <div class="text-gray-500 text-xs mb-1">New Leads</div>
+                                <div class="text-2xl font-bold text-white">+84 <span class="text-neon text-xs ml-1"><i class="fa-solid fa-arrow-up"></i></span></div>
+                            </div>
+                            <div class="bg-dark p-4 rounded-lg border border-border">
+                                <div class="text-gray-500 text-xs mb-1">Hot Leads</div>
+                                <div class="text-2xl font-bold text-orange-500">32 🔥</div>
+                            </div>
+                            <div class="bg-dark p-4 rounded-lg border border-border">
+                                <div class="text-gray-500 text-xs mb-1">Follow-up Required</div>
+                                <div class="text-2xl font-bold text-red-500">14</div>
+                            </div>
+                        </div>
+                        <div class="bg-dark p-4 rounded-lg border border-border">
+                            <div class="flex justify-between text-xs mb-2">
+                                <span class="text-gray-400">Average AI Lead Score</span>
+                                <span class="text-neon font-bold">86/100</span>
+                            </div>
+                            <div class="w-full bg-gray-800 rounded-full h-2">
+                                <div class="bg-neon h-2 rounded-full" style="width: 86%"></div>
+                            </div>
+                        </div>
+                        <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-neon/10 rounded-full blur-2xl"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 border-t border-border bg-dark/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Your Gym Is Getting Leads. <br> <span class="text-gray-400">But Are You Managing Them?</span></h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8 lg:gap-16 items-stretch">
+                <div class="bg-red-950/20 border border-red-900/30 p-8 rounded-2xl">
+                    <h3 class="text-xl font-bold text-red-400 mb-6 flex items-center"><i class="fa-solid fa-circle-xmark mr-3"></i> Traditional Methods</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start"><span class="text-red-500 mr-3 mt-1">❌</span> <span class="text-gray-300">Leads forgotten or lost</span></li>
+                        <li class="flex items-start"><span class="text-red-500 mr-3 mt-1">❌</span> <span class="text-gray-300">Slow follow-ups costing memberships</span></li>
+                        <li class="flex items-start"><span class="text-red-500 mr-3 mt-1">❌</span> <span class="text-gray-300">No clear lead priority for sales team</span></li>
+                        <li class="flex items-start"><span class="text-red-500 mr-3 mt-1">❌</span> <span class="text-gray-300">Leads scattered across WhatsApp & spreadsheets</span></li>
+                        <li class="flex items-start"><span class="text-red-500 mr-3 mt-1">❌</span> <span class="text-gray-300">Staff doesn’t know who to contact first</span></li>
+                        <li class="flex items-start"><span class="text-red-500 mr-3 mt-1">❌</span> <span class="text-gray-300">Potential members lose interest</span></li>
+                    </ul>
+                </div>
+                
+                <div class="bg-green-950/20 border border-neon/30 p-8 rounded-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-neon/10 rounded-full blur-2xl"></div>
+                    <h3 class="text-xl font-bold text-neon mb-6 flex items-center"><i class="fa-solid fa-circle-check mr-3"></i> The GymLead AI Solution</h3>
+                    <div class="flex flex-col justify-center h-full pb-8">
+                        <h4 class="text-2xl lg:text-3xl font-bold mb-4 leading-snug">GymLead AI Keeps Every Lead <span class="text-neon">Organized and Actionable.</span></h4>
+                        <p class="text-gray-400">Transform chaos into a streamlined sales pipeline. Use artificial intelligence to score, manage, and convert effortlessly.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-sm font-bold text-neon tracking-widest uppercase mb-2">Process</h2>
+                <h3 class="text-3xl md:text-4xl font-bold">How GymLead AI Works</h3>
+            </div>
+            
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="relative text-center group">
+                    <div class="w-16 h-16 mx-auto bg-card border border-border rounded-xl flex items-center justify-center text-2xl text-gray-400 group-hover:text-neon group-hover:border-neon transition mb-6 shadow-lg relative z-10">
+                        <i class="fa-solid fa-magnet"></i>
+                    </div>
+                    <div class="hidden md:block absolute top-8 left-[60%] w-[80%] h-0.5 bg-border -z-10"></div>
+                    <h4 class="text-xl font-bold mb-3">Step 1:<br>Capture Leads</h4>
+                    <p class="text-gray-400 text-sm">Collect gym enquiries from your website, social media, WhatsApp, forms, and other sources.</p>
+                </div>
+                <div class="relative text-center group">
+                    <div class="w-16 h-16 mx-auto bg-card border border-border rounded-xl flex items-center justify-center text-2xl text-gray-400 group-hover:text-neon group-hover:border-neon transition mb-6 shadow-lg relative z-10">
+                        <i class="fa-solid fa-sitemap"></i>
+                    </div>
+                    <div class="hidden md:block absolute top-8 left-[60%] w-[80%] h-0.5 bg-border -z-10"></div>
+                    <h4 class="text-xl font-bold mb-3">Step 2:<br>Organize Automatically</h4>
+                    <p class="text-gray-400 text-sm">Keep all your leads in one secure, organized, and centralized system.</p>
+                </div>
+                <div class="relative text-center group">
+                    <div class="w-16 h-16 mx-auto bg-card border border-border rounded-xl flex items-center justify-center text-2xl text-gray-400 group-hover:text-neon group-hover:border-neon transition mb-6 shadow-lg relative z-10">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <div class="hidden md:block absolute top-8 left-[60%] w-[80%] h-0.5 bg-border -z-10"></div>
+                    <h4 class="text-xl font-bold mb-3">Step 3:<br>AI Analyzes Leads</h4>
+                    <p class="text-gray-400 text-sm">GymLead AI provides a Lead Score, AI Reason, Recommended Action, and Priority status.</p>
+                </div>
+                <div class="relative text-center group">
+                    <div class="w-16 h-16 mx-auto bg-card border border-border rounded-xl flex items-center justify-center text-2xl text-gray-400 group-hover:text-neon group-hover:border-neon transition mb-6 shadow-lg relative z-10">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">Step 4:<br>Follow Up & Convert</h4>
+                    <p class="text-gray-400 text-sm">Take action at the exact right time and massively improve membership conversions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="py-20 bg-card border-y border-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-sm font-bold text-neon tracking-widest uppercase mb-2">Capabilities</h2>
+                <h3 class="text-3xl md:text-4xl font-bold">Powerful Features for Gym Growth</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-dark border border-border p-6 rounded-xl hover:border-neon/50 hover:shadow-[0_0_15px_rgba(57,255,20,0.1)] transition group">
+                    <div class="text-3xl mb-4 text-gray-400 group-hover:text-neon transition">🤖</div>
+                    <h4 class="text-lg font-bold mb-2">AI Lead Scoring</h4>
+                    <p class="text-gray-400 text-sm">Identify your highest-potential leads automatically based on data points.</p>
+                </div>
+                <div class="bg-dark border border-border p-6 rounded-xl hover:border-neon/50 hover:shadow-[0_0_15px_rgba(57,255,20,0.1)] transition group">
+                    <div class="text-3xl mb-4 text-gray-400 group-hover:text-neon transition">📊</div>
+                    <h4 class="text-lg font-bold mb-2">Smart Dashboard</h4>
+                    <p class="text-gray-400 text-sm">See your gym’s leads and sales performance in one beautiful place.</p>
+                </div>
+                <div class="bg-dark border border-border p-6 rounded-xl hover:border-neon/50 hover:shadow-[0_0_15px_rgba(57,255,20,0.1)] transition group">
+                    <div class="text-3xl mb-4 text-gray-400 group-hover:text-neon transition">🔥</div>
+                    <h4 class="text-lg font-bold mb-2">Lead Priority</h4>
+                    <p class="text-gray-400 text-sm">Instantly know which leads require immediate attention from your staff.</p>
+                </div>
+                <div class="bg-dark border border-border p-6 rounded-xl hover:border-neon/50 hover:shadow-[0_0_15px_rgba(57,255,20,0.1)] transition group">
+                    <div class="text-3xl mb-4 text-gray-400 group-hover:text-neon transition">💬</div>
+                    <h4 class="text-lg font-bold mb-2">Follow-Up Recommends</h4>
+                    <p class="text-gray-400 text-sm">Get AI-powered suggestions for what to say and do next.</p>
+                </div>
+                <div class="bg-dark border border-border p-6 rounded-xl hover:border-neon/50 hover:shadow-[0_0_15px_rgba(57,255,20,0.1)] transition group">
+                    <div class="text-3xl mb-4 text-gray-400 group-hover:text-neon transition">📈</div>
+                    <h4 class="text-lg font-bold mb-2">Lead Analytics</h4>
+                    <p class="text-gray-400 text-sm">Understand lead performance, sources, and conversion trends easily.</p>
+                </div>
+                <div class="bg-dark border border-border p-6 rounded-xl hover:border-neon/50 hover:shadow-[0_0_15px_rgba(57,255,20,0.1)] transition group">
+                    <div class="text-3xl mb-4 text-gray-400 group-hover:text-neon transition">🗂</div>
+                    <h4 class="text-lg font-bold mb-2">Lead Management</h4>
+                    <p class="text-gray-400 text-sm">Track every single lead from initial enquiry to active membership.</p>
+                </div>
+                <div class="bg-dark border border-border p-6 rounded-xl hover:border-neon/50 hover:shadow-[0_0_15px_rgba(57,255,20,0.1)] transition group">
+                    <div class="text-3xl mb-4 text-gray-400 group-hover:text-neon transition">⚡</div>
+                    <h4 class="text-lg font-bold mb-2">Faster Follow-Ups</h4>
+                    <p class="text-gray-400 text-sm">Equip your team with the tools to respond to hot leads instantly.</p>
+                </div>
+                <div class="bg-dark border border-border p-6 rounded-xl hover:border-neon/50 hover:shadow-[0_0_15px_rgba(57,255,20,0.1)] transition group">
+                    <div class="text-3xl mb-4 text-gray-400 group-hover:text-neon transition">🎯</div>
+                    <h4 class="text-lg font-bold mb-2">Better Conversions</h4>
+                    <p class="text-gray-400 text-sm">Focus your time and energy on leads most likely to join the gym.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-2 gap-16 items-center">
+                <div class="mb-12 lg:mb-0">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">Your AI-Powered <br> <span class="text-neon">Gym Sales Assistant</span></h2>
+                    <p class="text-gray-400 text-lg mb-8">
+                        Stop guessing who to call. GymLead AI analyzes every lead instantly and builds a personalized action plan so your staff can close deals faster.
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-center"><i class="fa-solid fa-check text-neon mr-3"></i> <span>Instant profile analysis</span></li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-neon mr-3"></i> <span>Customized talking points</span></li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-neon mr-3"></i> <span>Automated priority flagging</span></li>
+                    </ul>
+                </div>
+                
+                <div class="relative">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-neon to-emerald-600 rounded-2xl blur opacity-30 animate-pulse-glow"></div>
+                    <div class="bg-card border border-border rounded-2xl p-8 relative">
+                        <div class="flex justify-between items-start mb-6 pb-6 border-b border-border">
+                            <div>
+                                <div class="text-sm text-gray-500 mb-1">New Enquiry</div>
+                                <h3 class="text-2xl font-bold">Rahul Sharma</h3>
+                                <div class="mt-2 space-x-2">
+                                    <span class="bg-dark border border-border px-3 py-1 rounded-full text-xs text-gray-300">Interest: Weight Loss</span>
+                                    <span class="bg-dark border border-border px-3 py-1 rounded-full text-xs text-gray-300">Budget: Medium</span>
+                                </div>
+                            </div>
+                            <div class="text-center bg-dark border border-neon/50 p-3 rounded-xl shadow-[0_0_15px_rgba(57,255,20,0.15)]">
+                                <div class="text-[10px] text-gray-400 uppercase tracking-wider mb-1">AI Score</div>
+                                <div class="text-2xl font-bold text-neon">92/100 <span class="text-sm">🔥</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-sm text-neon font-bold mb-2 flex items-center"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i> AI Analysis</h4>
+                            <p class="text-gray-300 text-sm bg-dark p-4 rounded-lg border border-border">
+                                "Highly interested lead with strong purchase potential. User mentioned past gym experience and a specific weight loss goal for an upcoming event."
+                            </p>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-sm font-bold text-white mb-2">Recommended Action</h4>
+                            <div class="bg-blue-900/20 border border-blue-500/30 text-blue-300 p-4 rounded-lg text-sm flex items-start">
+                                <i class="fa-solid fa-phone-volume mt-1 mr-3 text-blue-400"></i>
+                                <span>Contact within 30 minutes. Offer a free 1-day trial focused on our specialized weight loss program.</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between mt-8 pt-6 border-t border-border">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 rounded-full bg-orange-500 animate-pulse"></div>
+                                <span class="font-bold text-orange-500">HOT LEAD</span>
+                            </div>
+                            <button class="bg-neon text-black px-4 py-2 rounded font-bold text-sm hover:bg-white transition">Take Action</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="dashboard" class="py-20 bg-card border-y border-border">
+        <div class="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold">Everything Your Gym Needs to Manage Leads.</h2>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">A command center designed specifically for fitness businesses.</p>
+            </div>
+            
+            <div class="bg-dark rounded-2xl border border-border shadow-2xl overflow-hidden">
+                <div class="bg-[#1a1a1a] px-4 py-3 border-b border-border flex items-center">
+                    <div class="flex space-x-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    </div>
+                    <div class="mx-auto text-xs text-gray-500 font-mono bg-black px-4 py-1 rounded-md">app.gymleadai.com/dashboard</div>
+                </div>
+                
+                <div class="p-6 lg:p-8 flex flex-col lg:flex-row gap-8">
+                    <div class="w-full lg:w-64 space-y-2 border-r border-border pr-4 hidden lg:block">
+                        <div class="text-gray-500 text-xs font-bold uppercase tracking-wider mb-4 px-3">Menu</div>
+                        <div class="bg-neon/10 text-neon px-4 py-2 rounded-lg font-medium flex items-center"><i class="fa-solid fa-house w-6"></i> Dashboard</div>
+                        <div class="text-gray-400 hover:text-white hover:bg-card px-4 py-2 rounded-lg font-medium flex items-center transition cursor-pointer"><i class="fa-solid fa-users w-6"></i> Leads</div>
+                        <div class="text-gray-400 hover:text-white hover:bg-card px-4 py-2 rounded-lg font-medium flex items-center transition cursor-pointer"><i class="fa-solid fa-chart-pie w-6"></i> Analytics</div>
+                        <div class="text-gray-400 hover:text-white hover:bg-card px-4 py-2 rounded-lg font-medium flex items-center transition cursor-pointer"><i class="fa-solid fa-gear w-6"></i> Settings</div>
+                    </div>
+                    
+                    <div class="flex-1">
+                        <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+                            <div class="bg-card p-4 rounded-xl border border-border">
+                                <div class="text-gray-500 text-xs">Total Leads</div>
+                                <div class="text-xl font-bold mt-1">450</div>
+                            </div>
+                            <div class="bg-card p-4 rounded-xl border border-border">
+                                <div class="text-gray-500 text-xs">New Leads</div>
+                                <div class="text-xl font-bold mt-1 text-neon">+12</div>
+                            </div>
+                            <div class="bg-card p-4 rounded-xl border border-border">
+                                <div class="text-gray-500 text-xs">Hot Leads</div>
+                                <div class="text-xl font-bold mt-1 text-orange-500">24</div>
+                            </div>
+                            <div class="bg-card p-4 rounded-xl border border-border">
+                                <div class="text-gray-500 text-xs">Converted</div>
+                                <div class="text-xl font-bold mt-1">112</div>
+                            </div>
+                            <div class="bg-card p-4 rounded-xl border border-border">
+                                <div class="text-gray-500 text-xs">Conversion Rate</div>
+                                <div class="text-xl font-bold mt-1">24.8%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-card border border-border rounded-xl overflow-hidden">
+                            <div class="px-6 py-4 border-b border-border flex justify-between items-center">
+                                <h3 class="font-bold">Recent Leads</h3>
+                                <button class="text-xs bg-dark border border-border px-3 py-1 rounded text-gray-300">View All</button>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-sm">
+                                    <thead class="bg-dark/50 text-gray-400">
+                                        <tr>
+                                            <th class="px-6 py-3 font-medium">Name</th>
+                                            <th class="px-6 py-3 font-medium">Status</th>
+                                            <th class="px-6 py-3 font-medium">AI Score</th>
+                                            <th class="px-6 py-3 font-medium hidden md:table-cell">Source</th>
+                                            <th class="px-6 py-3 font-medium">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-border">
+                                        <tr class="hover:bg-dark/50 transition">
+                                            <td class="px-6 py-4">Amit Patel</td>
+                                            <td class="px-6 py-4"><span class="bg-orange-500/20 text-orange-400 px-2 py-1 rounded text-xs font-bold">Hot</span></td>
+                                            <td class="px-6 py-4"><span class="text-neon font-bold">95</span>/100</td>
+                                            <td class="px-6 py-4 text-gray-400 hidden md:table-cell">WhatsApp</td>
+                                            <td class="px-6 py-4"><button class="text-neon text-xs border border-neon px-2 py-1 rounded hover:bg-neon hover:text-black transition">Review</button></td>
+                                        </tr>
+                                        <tr class="hover:bg-dark/50 transition">
+                                            <td class="px-6 py-4">Priya Singh</td>
+                                            <td class="px-6 py-4"><span class="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-xs font-bold">Follow-up</span></td>
+                                            <td class="px-6 py-4"><span class="text-white font-bold">78</span>/100</td>
+                                            <td class="px-6 py-4 text-gray-400 hidden md:table-cell">Website Form</td>
+                                            <td class="px-6 py-4"><button class="text-neon text-xs border border-neon px-2 py-1 rounded hover:bg-neon hover:text-black transition">Review</button></td>
+                                        </tr>
+                                        <tr class="hover:bg-dark/50 transition">
+                                            <td class="px-6 py-4">Ravi Kumar</td>
+                                            <td class="px-6 py-4"><span class="bg-gray-500/20 text-gray-400 px-2 py-1 rounded text-xs font-bold">New</span></td>
+                                            <td class="px-6 py-4"><span class="text-white font-bold">65</span>/100</td>
+                                            <td class="px-6 py-4 text-gray-400 hidden md:table-cell">Instagram</td>
+                                            <td class="px-6 py-4"><button class="text-neon text-xs border border-neon px-2 py-1 rounded hover:bg-neon hover:text-black transition">Review</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16">Built for Gym Owners <span class="text-neon">Who Want to Grow.</span></h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="p-6 bg-card border border-border rounded-xl">
+                    <i class="fa-regular fa-clock text-2xl text-neon mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Save Time</h3>
+                    <p class="text-gray-400">Spend less time organizing leads and more time running your fitness business.</p>
+                </div>
+                <div class="p-6 bg-card border border-border rounded-xl">
+                    <i class="fa-solid fa-bullseye text-2xl text-neon mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Never Miss a Lead</h3>
+                    <p class="text-gray-400">Keep every single enquiry safely stored in one accessible system.</p>
+                </div>
+                <div class="p-6 bg-card border border-border rounded-xl">
+                    <i class="fa-solid fa-star text-2xl text-neon mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Focus on High-Value</h3>
+                    <p class="text-gray-400">Use AI to instantly know exactly who is most likely to join.</p>
+                </div>
+                <div class="p-6 bg-card border border-border rounded-xl md:col-start-1 md:col-end-2 md:translate-x-1/2">
+                    <i class="fa-solid fa-comment-dots text-2xl text-neon mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Improve Follow-Ups</h3>
+                    <p class="text-gray-400">Take smarter actions using automated AI recommendations.</p>
+                </div>
+                <div class="p-6 bg-card border border-border rounded-xl md:col-start-2 md:col-end-3 md:translate-x-1/2">
+                    <i class="fa-solid fa-arrow-trend-up text-2xl text-neon mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Increase Memberships</h3>
+                    <p class="text-gray-400">Convert significantly more enquiries into paying members.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-dark border-t border-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">Who Uses GymLead AI?</h2>
+            <div class="flex flex-wrap justify-center gap-4">
+                <div class="bg-card border border-border px-6 py-4 rounded-full flex items-center space-x-3 shadow-lg">
+                    <span class="text-xl">🏋️</span> <span class="font-semibold">Independent Gyms</span>
+                </div>
+                <div class="bg-card border border-border px-6 py-4 rounded-full flex items-center space-x-3 shadow-lg">
+                    <span class="text-xl">💪</span> <span class="font-semibold">Fitness Centers</span>
+                </div>
+                <div class="bg-card border border-border px-6 py-4 rounded-full flex items-center space-x-3 shadow-lg">
+                    <span class="text-xl">🏢</span> <span class="font-semibold">Multi-Branch Gyms</span>
+                </div>
+                <div class="bg-card border border-border px-6 py-4 rounded-full flex items-center space-x-3 shadow-lg">
+                    <span class="text-xl">🏋️</span> <span class="font-semibold">Personal Training Studios</span>
+                </div>
+                <div class="bg-card border border-border px-6 py-4 rounded-full flex items-center space-x-3 shadow-lg">
+                    <span class="text-xl">🧘</span> <span class="font-semibold">Fitness & Wellness Businesses</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="demo-video" class="py-24 bg-card border-y border-border relative overflow-hidden">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">See GymLead AI in Action.</h2>
+            <p class="text-gray-400 text-lg mb-10">Watch how GymLead AI can help your gym manage leads and improve follow-ups.</p>
+            
+            <div class="relative w-full max-w-4xl mx-auto aspect-video bg-dark border border-border rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(57,255,20,0.1)] flex items-center justify-center group" id="video-container">
+                <div id="video-placeholder" class="text-center p-8">
+                    <div class="w-20 h-20 bg-neon/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition cursor-pointer" onclick="window.open(WHATSAPP_DEMO_URL, '_blank')">
+                        <i class="fa-solid fa-play text-3xl text-neon ml-1"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Video Coming Soon</h3>
+                    <p class="text-gray-500 text-sm">Book a live demo to see the platform.</p>
+                </div>
+                </div>
+            
+            <button onclick="window.open(WHATSAPP_DEMO_URL, '_blank')" class="mt-10 bg-card border border-neon text-neon px-8 py-3 rounded-lg font-bold hover:bg-neon hover:text-black transition">
+                ▶ Book Live Demo
+            </button>
+        </div>
+    </section>
+
+    <section id="pricing" class="py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Simple, Transparent Pricing</h2>
+                <p class="text-gray-400">Choose the perfect plan to grow your gym.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto items-center">
+                <div class="bg-card border border-border rounded-2xl p-8 hover:border-gray-600 transition">
+                    <h3 class="text-xl font-bold mb-2">STARTER</h3>
+                    <p class="text-gray-400 text-sm mb-6">For small and independent gyms.</p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center"><i class="fa-solid fa-check text-green-500 mr-3"></i> <span>Lead Management</span></li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-green-500 mr-3"></i> <span>Basic Dashboard</span></li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-green-500 mr-3"></i> <span>Lead Tracking</span></li>
+                    </ul>
+                    <button onclick="window.open(WHATSAPP_DEMO_URL, '_blank')" class="w-full bg-dark border border-border text-white py-3 rounded-lg font-bold hover:border-gray-500 transition">Get Started</button>
+                </div>
+                
+                <div class="bg-dark border-2 border-neon rounded-2xl p-8 transform md:scale-105 shadow-[0_0_20px_rgba(57,255,20,0.15)] relative">
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-neon text-black px-4 py-1 rounded-full text-xs font-bold tracking-wider">
+                        ⭐ MOST POPULAR
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-neon">PROFESSIONAL</h3>
+                    <p class="text-gray-400 text-sm mb-6">For growing fitness centers.</p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center"><i class="fa-solid fa-check text-neon mr-3"></i> <span>Everything in Starter</span></li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-neon mr-3"></i> <span class="font-bold text-white">AI Lead Scoring</span></li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-neon mr-3"></i> <span>Recommended Actions</span></li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-neon mr-3"></i> <span>Advanced Dashboard</span></li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-neon mr-3"></i> <span>Priority Support</span></li>
+                    </ul>
+                    <button onclick="window.open(WHATSAPP_DEMO_URL, '_blank')" class="w-full bg-neon text-black py-3 rounded-lg font-bold hover:bg-white transition shadow-lg">Book a Demo</button>
+                </div>
+                
+                <div class="bg-card border border-border rounded-2xl p-8 hover:border-gray-600 transition">
+                    <h3 class="text-xl font-bold mb-2">ENTERPRISE</h3>
+                    <p class="text-gray-400 text-sm mb-6">For multi-location gym brands.</p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center"><i class="fa-solid fa-check text-green-500 mr-3"></i> <span>Everything in Professional</span></li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-green-500 mr-3"></i> <span>Multi-Gym Management</span></li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-green-500 mr-3"></i> <span>Advanced Analytics</span></li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-green-500 mr-3"></i> <span>Custom Solutions</span></li>
+                    </ul>
+                    <button onclick="window.open(WHATSAPP_DEMO_URL, '_blank')" class="w-full bg-dark border border-border text-white py-3 rounded-lg font-bold hover:border-gray-500 transition">Contact Us</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-dark border-t border-border">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">Why Upgrade to GymLead AI?</h2>
+            
+            <div class="grid md:grid-cols-2 gap-0 border border-border rounded-2xl overflow-hidden">
+                <div class="bg-card p-8 md:p-12 border-b md:border-b-0 md:border-r border-border">
+                    <h3 class="text-xl font-bold text-gray-400 mb-6 flex items-center"><i class="fa-solid fa-file-excel mr-2"></i> Traditional Lead Management</h3>
+                    <ul class="space-y-5 text-gray-500">
+                        <li class="flex items-start"><i class="fa-solid fa-xmark text-red-500 mt-1 mr-3"></i> Manual spreadsheets</li>
+                        <li class="flex items-start"><i class="fa-solid fa-xmark text-red-500 mt-1 mr-3"></i> Missed leads</li>
+                        <li class="flex items-start"><i class="fa-solid fa-xmark text-red-500 mt-1 mr-3"></i> No lead priority</li>
+                        <li class="flex items-start"><i class="fa-solid fa-xmark text-red-500 mt-1 mr-3"></i> Slow follow-ups</li>
+                    </ul>
+                </div>
+                <div class="bg-[#0f1a10] p-8 md:p-12 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-neon/5 rounded-full blur-2xl"></div>
+                    <h3 class="text-xl font-bold text-neon mb-6 flex items-center"><i class="fa-solid fa-bolt mr-2"></i> GymLead AI</h3>
+                    <ul class="space-y-5 text-gray-200 font-medium">
+                        <li class="flex items-start"><i class="fa-solid fa-check text-neon mt-1 mr-3 shadow-neon"></i> AI-powered lead scoring</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-neon mt-1 mr-3"></i> Centralized dashboard</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-neon mt-1 mr-3"></i> Smart recommendations</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-neon mt-1 mr-3"></i> Faster follow-ups</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-neon mt-1 mr-3"></i> Clear lead priorities</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="py-20 bg-card border-t border-border">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+            
+            <div class="space-y-4">
+                <details class="bg-dark border border-border rounded-xl group overflow-hidden">
+                    <summary class="px-6 py-4 font-semibold cursor-pointer flex justify-between items-center hover:text-neon transition">
+                        What is GymLead AI?
+                        <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down"></i></span>
+                    </summary>
+                    <div class="px-6 pb-4 text-gray-400">
+                        GymLead AI is an AI-powered lead management system designed specifically for gyms. It centralizes all your enquiries and uses artificial intelligence to help you close deals faster.
+                    </div>
+                </details>
+                <details class="bg-dark border border-border rounded-xl group overflow-hidden">
+                    <summary class="px-6 py-4 font-semibold cursor-pointer flex justify-between items-center hover:text-neon transition">
+                        How does AI Lead Scoring work?
+                        <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down"></i></span>
+                    </summary>
+                    <div class="px-6 pb-4 text-gray-400">
+                        The system analyzes available lead information (such as budget, goals, engagement level) and calculates a score out of 100, helping you prioritize leads based on their true potential to buy a membership.
+                    </div>
+                </details>
+                <details class="bg-dark border border-border rounded-xl group overflow-hidden">
+                    <summary class="px-6 py-4 font-semibold cursor-pointer flex justify-between items-center hover:text-neon transition">
+                        Can I use GymLead AI for multiple gym branches?
+                        <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down"></i></span>
+                    </summary>
+                    <div class="px-6 pb-4 text-gray-400">
+                        Yes, depending on the selected plan (Enterprise) and setup, you can manage leads across multiple branches from a unified dashboard.
+                    </div>
+                </details>
+                <details class="bg-dark border border-border rounded-xl group overflow-hidden">
+                    <summary class="px-6 py-4 font-semibold cursor-pointer flex justify-between items-center hover:text-neon transition">
+                        Do I need technical knowledge?
+                        <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down"></i></span>
+                    </summary>
+                    <div class="px-6 pb-4 text-gray-400">
+                        No. GymLead AI is designed to be highly intuitive and simple for gym owners, managers, and sales staff to use without any coding or technical background.
+                    </div>
+                </details>
+                <details class="bg-dark border border-border rounded-xl group overflow-hidden">
+                    <summary class="px-6 py-4 font-semibold cursor-pointer flex justify-between items-center hover:text-neon transition">
+                        Can I request a demo?
+                        <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down"></i></span>
+                    </summary>
+                    <div class="px-6 pb-4 text-gray-400">
+                        Yes. Click any "Book a Free Demo" button on this page to contact us instantly via WhatsApp and schedule your walkthrough.
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-2 gap-16 items-center">
+                <div class="mb-12 lg:mb-0">
+                    <h2 class="text-4xl font-bold mb-4">Let’s Grow Your <br><span class="text-neon">Gym Together.</span></h2>
+                    <p class="text-gray-400 text-lg mb-10">Ready to manage your gym leads smarter? Contact GymLead AI today and book your free demo.</p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center bg-card border border-border p-4 rounded-xl">
+                            <div class="w-12 h-12 bg-dark rounded-full flex items-center justify-center text-neon text-xl mr-4">
+                                <i class="fa-regular fa-envelope"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-500 font-bold mb-1">Email Us</div>
+                                <a href="mailto:gymleadai09@gmail.com" class="text-white hover:text-neon transition text-lg font-medium">gymleadai09@gmail.com</a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center bg-card border border-border p-4 rounded-xl">
+                            <div class="w-12 h-12 bg-dark rounded-full flex items-center justify-center text-neon text-xl mr-4">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-500 font-bold mb-1">WhatsApp</div>
+                                <a href="https://wa.me/919381423141" target="_blank" class="text-white hover:text-neon transition text-lg font-medium">+91 93814 23141</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-10 flex space-x-4">
+                        <a href="https://wa.me/919381423141" target="_blank" class="bg-[#25D366] text-white px-6 py-3 rounded-lg font-bold hover:bg-[#128C7E] transition flex items-center">
+                            <i class="fa-brands fa-whatsapp text-xl mr-2"></i> Chat on WhatsApp
+                        </a>
+                        <a href="mailto:gymleadai09@gmail.com" class="bg-card border border-border text-white px-6 py-3 rounded-lg font-bold hover:border-gray-500 transition flex items-center">
+                            <i class="fa-regular fa-envelope text-xl mr-2"></i> Send Email
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="bg-card border border-border rounded-2xl p-8 relative">
+                    <div class="absolute top-0 right-0 w-full h-2 bg-gradient-to-r from-neon to-emerald-600 rounded-t-2xl"></div>
+                    <h3 class="text-2xl font-bold mb-6">Book Your Free Demo</h3>
+                    
+                    <form id="demo-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-1">Full Name</label>
+                            <input type="text" name="name" required class="w-full bg-dark border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-neon transition">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-1">Gym Name</label>
+                                <input type="text" name="gym" required class="w-full bg-dark border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-neon transition">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-1">No. of Members</label>
+                                <select name="members" class="w-full bg-dark border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-neon transition">
+                                    <option>0 - 100</option>
+                                    <option>100 - 500</option>
+                                    <option>500 - 1000</option>
+                                    <option>1000+</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-1">Email</label>
+                                <input type="email" name="email" required class="w-full bg-dark border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-neon transition">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-1">WhatsApp Number</label>
+                                <input type="tel" name="phone" required class="w-full bg-dark border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-neon transition">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-1">Country</label>
+                            <input type="text" name="country" required class="w-full bg-dark border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-neon transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-1">Message (Optional)</label>
+                            <textarea name="message" rows="3" class="w-full bg-dark border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-neon transition"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-neon text-black py-3 rounded-lg font-bold hover:bg-white transition shadow-[0_0_15px_rgba(57,255,20,0.3)] mt-2">
+                            Book My Free Demo
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-card border-t border-border pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div class="md:col-span-2">
+                    <div class="flex items-center mb-4">
+                        <i class="fa-solid fa-dumbbell text-neon text-2xl mr-2"></i>
+                        <span class="font-bold text-xl tracking-wider text-white">GYMLEAD <span class="text-neon">AI</span></span>
+                    </div>
+                    <p class="text-gray-400 max-w-sm mb-6">AI-powered lead management for modern gyms. Turn more enquiries into paying members.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-white mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-neon transition">Home</a></li>
+                        <li><a href="#features" class="hover:text-neon transition">Features</a></li>
+                        <li><a href="#how-it-works" class="hover:text-neon transition">How It Works</a></li>
+                        <li><a href="#pricing" class="hover:text-neon transition">Pricing</a></li>
+                        <li><a href="#faq" class="hover:text-neon transition">FAQ</a></li>
+                        <li><a href="#contact" class="hover:text-neon transition">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-white mb-4">Contact</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li class="flex items-center"><i class="fa-regular fa-envelope mr-2 text-neon"></i> <a href="mailto:gymleadai09@gmail.com" class="hover:text-white transition">gymleadai09@gmail.com</a></li>
+                        <li class="flex items-center"><i class="fa-brands fa-whatsapp mr-2 text-neon"></i> <a href="https://wa.me/919381423141" target="_blank" class="hover:text-white transition">+91 93814 23141</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-border pt-8 text-center text-sm text-gray-600 flex flex-col md:flex-row justify-between items-center">
+                <p>&copy; 2026 GymLead AI. All Rights Reserved.</p>
+                <div class="mt-4 md:mt-0 space-x-4">
+                    <a href="javascript:void(0)" class="hover:text-gray-300">Privacy Policy</a>
+                    <a href="javascript:void(0)" class="hover:text-gray-300">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/919381423141" target="_blank" class="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white w-14 h-14 rounded-full flex items-center justify-center text-3xl shadow-[0_0_15px_rgba(37,211,102,0.5)] hover:scale-110 transition animate-bounce" style="animation-duration: 2s;">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // 1. Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Close menu on click (mobile)
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // 2. Demo Video Placeholder Logic
+        document.addEventListener("DOMContentLoaded", () => {
+            const videoContainer = document.getElementById('video-container');
+            if(GYMLEAD_CONFIG.DEMO_VIDEO_URL && GYMLEAD_CONFIG.DEMO_VIDEO_URL.trim() !== "") {
+                // If URL is set, clear placeholder and inject iframe
+                videoContainer.innerHTML = `<iframe class="w-full h-full absolute inset-0" src="${GYMLEAD_CONFIG.DEMO_VIDEO_URL}" title="GymLead AI Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            }
+        });
+
+        // 3. Form Submission Logic
+        const form = document.getElementById('demo-form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            
+            const btn = form.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+            btn.innerText = "Processing...";
+            btn.disabled = true;
+
+            // Check if Google Apps Script URL exists
+            if (GYMLEAD_CONFIG.GOOGLE_APPS_SCRIPT_URL && GYMLEAD_CONFIG.GOOGLE_APPS_SCRIPT_URL.trim() !== "") {
+                // Future Google Sheets Integration logic goes here
+                fetch(GYMLEAD_CONFIG.GOOGLE_APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: formData
+                }).then(() => {
+                    alert("Demo request submitted successfully! We will contact you soon.");
+                    form.reset();
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }).catch(err => {
+                    console.error('Error!', err.message);
+                    alert("Something went wrong. Please try again.");
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                });
+            } else {
+                // Fallback: Format message and redirect to WhatsApp
+                const whatsappMessage = `Hi GymLead AI, I want to book a free demo.\n\n*Name:* ${data.name}\n*Gym:* ${data.gym}\n*Members:* ${data.members}\n*Email:* ${data.email}\n*Phone:* ${data.phone}\n*Country:* ${data.country}\n*Message:* ${data.message || 'None'}`;
+                
+                const encodedMessage = encodeURIComponent(whatsappMessage);
+                const waUrl = `https://wa.me/919381423141?text=${encodedMessage}`;
+                
+                window.open(waUrl, '_blank');
+                
+                form.reset();
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
